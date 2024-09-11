@@ -7,6 +7,10 @@ export const globalStyles = globalCss({
     boxSizing: 'border-box'
   },
 
+  ':focus': {
+    outline: 'none'
+  },
+
   body: {
     backgroundColor: '$gray900',
     color: '$gray100',

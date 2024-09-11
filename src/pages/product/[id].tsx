@@ -6,37 +6,18 @@ import Image from "next/image"
 import { useState } from "react"
 import Stripe from "stripe"
 import Head from "next/head"
+import { useShoppingCart } from "use-shopping-cart"
+import { Product as CartProduct } from "use-shopping-cart/core"
 
 interface ProductProps {
-  product: {
-    id: string
-    name: string
-    imageUrl: string
-    price: string
-    description: string
-    defaultPriceId: string
-  }
+  product: CartProduct
 }
 
 export default function Product({ product }: ProductProps) {
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
+  const { addItem } = useShoppingCart()
 
-  async function handleBuyProduct() {
-    try {
-      setIsCreatingCheckoutSession(true)
-
-      const response = await axios.post('/api/checkout', {
-        priceId: product.defaultPriceId
-      })
-
-      const { checkoutUrl } = response.data
-
-      window.location.href = checkoutUrl
-    } catch (error) {
-      setIsCreatingCheckoutSession(false)
-
-      console.log(error)
-    }
+  async function handleAddItemToCart() {
+    addItem(product)
   }
 
   return (
@@ -51,12 +32,15 @@ export default function Product({ product }: ProductProps) {
 
         <ProductDetails>
           <h1>{product.name}</h1>
-          <span>{product.price}</span>
+          <span>{new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+          }).format(product.price / 100)}</span>
 
           <p>{product.description}</p>
 
-          <button disabled={isCreatingCheckoutSession} onClick={handleBuyProduct}>
-            Comprar agora
+          <button onClick={handleAddItemToCart}>
+            Colocar na sacola
           </button>
         </ProductDetails>
       </ProductContainer>
@@ -69,7 +53,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: [
       { params: { id: 'prod_QSFRRHP7kctiTP' } }
     ],
-    fallback: false
+    fallback: true
   }
 }
 
@@ -89,10 +73,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
         name: product.name,
         imageUrl: product.images[0],
         url: product.url,
-        price: new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }).format(price.unit_amount / 100),
+        price: Number(price.unit_amount),
         description: product.description,
         defaultPriceId: price.id
       }

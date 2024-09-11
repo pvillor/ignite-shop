@@ -7,6 +7,7 @@ export const SuccessContainer = styled('main', {
   justifyContent: 'center',
   margin: '0 auto',
   height: 656,
+  gap: '3rem',
 
   h1: {
     fontSize: '$2xl',
@@ -18,17 +19,16 @@ export const SuccessContainer = styled('main', {
     color: '$gray300',
     maxWidth: 560,
     textAlign: 'center',
-    marginTop: '2rem',
     lineHeight: 1.4
   },
 
   a: {
-    marginTop: '5rem',
     display: 'block',
     fontSize: '$lg',
     color: '$green500',
     textDecoration: 'none',
     fontWeight: 'bold',
+    padding: '1rem',
 
     '&:hover': {
       color: '$green300',
@@ -36,20 +36,35 @@ export const SuccessContainer = styled('main', {
   }
 })
 
+export const ImagesContainer = styled('div', {
+  display: 'flex',
+})
+
 export const ImageContainer = styled('div', {
-  width: '100%',
-  maxWidth: 130,
-  height: 145,
-  background: 'linear-gradient(100deg, #1ea483 0%, #7465d4 100%)',
-  borderRadius: 8,
+  maxWidth: 140,
+  height: 140,
+  background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
+  borderRadius: '50%',
   padding: '0.25rem',
-  marginTop: '4rem',
 
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
 
+  boxShadow: '0 0 2rem rgba(0, 0, 0, 0.6)',
+
   img: {
     objectFit: 'cover'
+  },
+
+  '&:not(:first-child)': {
+    marginLeft: '-3rem',
   }
+})
+
+export const PurchaseDetails = styled('div', {
+  display: 'flex',
+  flexDirection: "column",
+  alignItems: 'center',
+  gap: '1.5rem'
 })

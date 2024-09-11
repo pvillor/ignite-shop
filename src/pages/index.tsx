@@ -9,23 +9,31 @@ import { GetStaticProps } from "next";
 import Stripe from "stripe";
 import Link from "next/link";
 import Head from "next/head";
+import { ShoppingBag } from "@/styles/pages/app";
+import { ShoppingBag as ShoppingBagIcon } from "phosphor-react";
+import { useShoppingCart } from "use-shopping-cart";
+import { Product as CartProduct } from "use-shopping-cart/core";
+import { MouseEvent } from "react";
 
 interface HomeProps {
-  products: {
-    id: string
-    name: string
-    imageUrl: string
-    price: string
-  }[]
+  products: CartProduct[]
 }
 
 export default function Home({ products }: HomeProps) {
   const [sliderRef] = useKeenSlider({
     slides: {
-      perView: 3,
-      spacing: 48,
-    }
+      perView: 2,
+      spacing: 48
+    },
   })
+
+  const { addItem } = useShoppingCart()
+
+  function handleAddItemToCart(e: MouseEvent, product: CartProduct) {
+    e.preventDefault()
+
+    addItem(product)
+  }
 
   return (
     <>
@@ -41,8 +49,13 @@ export default function Home({ products }: HomeProps) {
                 <Image src={product.imageUrl} width={520} height={480} alt="" />
 
                 <footer>
-                  <strong>{product.name}</strong>
-                  <span>{product.price}</span>
+                  <div>
+                    <strong>{product.name}</strong>
+                    <span>{product.price}</span>
+                  </div>
+                  <button onClick={(e) => handleAddItemToCart(e, product)}>
+                    <ShoppingBagIcon size={32} />
+                  </button>
                 </footer>
               </Product></Link>
           )
